@@ -61,7 +61,7 @@ class ChatScreen extends Component {
         
       });
 
-      //this.getConversation(this.state.user_name,this.state.personId.username);
+      this.getConversation(this.state.user_name,this.state.personId.username);
     }
     sendUser(username){
         this.socket.emit("username", {username: username});
@@ -70,7 +70,7 @@ class ChatScreen extends Component {
         this.socket.disconnect();
     }
 //name==username name2==chatwith
-    /*getConversation(name1, name2){
+    getConversation(name1, name2){
         let url = MESSAGE;
         if (name2 != "chat-room") {
           let route = "/" + name1 + "/" + name2;
@@ -88,20 +88,28 @@ class ChatScreen extends Component {
                 .then((response) => response.json())
                 .then((responseJson) => {
                     console.log('response object:',responseJson.conversation);
-                    this.onReceivedMessage(responseJson.conversation);
+                    //this.onReceivedMessage(responseJson.conversation);
                 })
                 .catch((error) => {
                   console.error(error);
                 });
         });
-    }*/
+    }
     onReceivedMessage(messages) {
         this._storeMessages(messages);
     }
     //
     onSend(messages=[]) {
         //alert(messages[0].text);
-        this.socket.emit("message", {message: messages[0].text, to: this.state.personId.username});
+        let message = {
+          text: messages[0].text,
+          from: messages[0].user.username,
+          created: new Date(messages[0].createdAt),
+          conversationId: '5da9f6da13f0623f801cee7a',
+          inChatRoom:"chat-room"
+          
+        };
+        this.socket.emit("message", {message: message, to: this.state.personId.username});
         this._storeMessages(messages);
     }
     _storeMessages(messages) {
