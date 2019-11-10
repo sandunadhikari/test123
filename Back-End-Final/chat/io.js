@@ -38,7 +38,7 @@ const initialize = (server) => {
     });
 
     socket.on("message", (data) => {
-      
+      console.log(JSON.stringify(data));
       if (data.to == "chat-room") {
         socket.broadcast.to("chat-room").emit("message", data.message);
       } else {
